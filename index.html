@@ -282,11 +282,14 @@
 
   /* ---------- Film / video ---------- */
   .film-frame{
+    display:block;
     background:var(--hero-1);
     border-radius:4px;
     padding:0;
     box-shadow:0 30px 60px -30px rgba(33,14,23,.5);
     overflow:hidden;
+    text-decoration:none;
+    color:inherit;
   }
   .sprockets{
     height:14px;
@@ -295,13 +298,55 @@
     background-position:center;
     background-repeat:repeat-x;
   }
-  .film-frame video, .film-frame iframe{
-    display:block;
+  .film-poster{
+    position:relative;
     width:100%;
     aspect-ratio:16/9;
     min-height:220px;
-    border:0;
-    background:#000;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:1.1rem;
+    background:
+      radial-gradient(120% 140% at 50% 32%, var(--hero-3) 0%, var(--hero-2) 45%, var(--hero-1) 100%);
+    color:var(--hero-ink);
+    transition:filter .25s ease;
+  }
+  .film-frame:hover .film-poster,
+  .film-frame:focus-visible .film-poster{
+    filter:brightness(1.1);
+  }
+  .film-poster::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      radial-gradient(1px 1px at 14% 24%, rgba(245,233,222,.45) 0, transparent 60%),
+      radial-gradient(1px 1px at 80% 20%, rgba(245,233,222,.35) 0, transparent 60%),
+      radial-gradient(1.5px 1.5px at 35% 72%, rgba(245,233,222,.3) 0, transparent 60%),
+      radial-gradient(1px 1px at 86% 64%, rgba(245,233,222,.35) 0, transparent 60%);
+    opacity:.7;
+    pointer-events:none;
+  }
+  .play-btn{
+    position:relative;
+    width:62px;
+    height:62px;
+    border-radius:50%;
+    background:var(--accent-gold);
+    color:var(--hero-1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 16px 32px -12px rgba(0,0,0,.55);
+  }
+  .play-btn svg{ margin-left:3px; }
+  .film-poster-text{
+    position:relative;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.05rem;
   }
   /* ---------- Letter ---------- */
   .letter-card{
@@ -692,11 +737,16 @@
 
   <section class="film" data-reveal>
     <p class="section-label">Notre histoire en images</p>
-    <div class="film-frame">
+    <a class="film-frame" href="https://drive.google.com/file/d/1oPi1PchzIP4VN4AONZhWWdF4TeHIxeeg/view" target="_blank" rel="noopener" aria-label="Regarder notre film">
       <div class="sprockets" aria-hidden="true"></div>
-      <iframe src="https://drive.google.com/file/d/1oPi1PchzIP4VN4AONZhWWdF4TeHIxeeg/preview" allow="autoplay; fullscreen; encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen loading="lazy" title="Notre histoire en images"></iframe>
+      <div class="film-poster">
+        <span class="play-btn" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+        </span>
+        <span class="film-poster-text">Regarder notre film</span>
+      </div>
       <div class="sprockets" aria-hidden="true"></div>
-    </div>
+    </a>
   </section>
 
   <section class="letter" data-reveal>
