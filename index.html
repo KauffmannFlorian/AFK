@@ -296,84 +296,20 @@
     background-position:center;
     background-repeat:repeat-x;
   }
-  .video-wrap{
+  .film-ratio{
     position:relative;
+    width:100%;
+    height:0;
+    padding-top:56.25%;
     background:#000;
   }
-  .video-wrap video{
+  .film-ratio iframe{
+    position:absolute;
+    inset:0;
     display:block;
     width:100%;
-    aspect-ratio:16/9;
-    min-height:220px;
+    height:100%;
     border:0;
-    background:#000;
-  }
-  .video-toggle{
-    position:absolute;
-    inset:0;
-    margin:auto;
-    width:60px;
-    height:60px;
-    border-radius:50%;
-    border:0;
-    padding:0;
-    background:rgba(33,14,23,.55);
-    color:var(--hero-ink);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    transition:opacity .2s ease, background .2s ease;
-  }
-  .video-toggle:hover{background:rgba(33,14,23,.75);}
-  .video-toggle .icon-play{margin-left:3px;}
-  .video-toggle svg[hidden]{display:none;}
-  .video-wrap.is-playing .video-toggle{opacity:0;}
-  .video-wrap.is-playing:hover .video-toggle,
-  .video-wrap.is-playing:focus-within .video-toggle{opacity:1;}
-  .video-bar{
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:0;
-    padding:1.1rem .8rem .7rem;
-    background:linear-gradient(transparent, rgba(0,0,0,.6));
-    pointer-events:none;
-  }
-  .video-bar-track{
-    position:relative;
-    height:5px;
-    border-radius:4px;
-    background:rgba(245,233,222,.32);
-    cursor:pointer;
-    pointer-events:auto;
-  }
-  .video-bar-track::before{
-    content:"";
-    position:absolute;
-    left:0;
-    right:0;
-    top:-8px;
-    bottom:-8px;
-  }
-  .video-bar-fill{
-    position:absolute;
-    inset:0;
-    width:0%;
-    border-radius:4px;
-    background:var(--accent-gold);
-  }
-  .video-bar-fill::after{
-    content:"";
-    position:absolute;
-    right:-5px;
-    top:50%;
-    width:11px;
-    height:11px;
-    transform:translateY(-50%);
-    border-radius:50%;
-    background:var(--accent-gold);
-    box-shadow:0 1px 4px rgba(0,0,0,.5);
   }
   /* ---------- Letter ---------- */
   .letter-card{
@@ -766,19 +702,8 @@
     <p class="section-label">Notre histoire en images</p>
     <div class="film-frame">
       <div class="sprockets" aria-hidden="true"></div>
-      <div class="video-wrap" id="videoWrap">
-        <video id="storyVideo" src="video.mp4" playsinline preload="metadata" title="Notre histoire en images">
-          Ta vidéo ne peut pas s'afficher : ton navigateur ne supporte pas la lecture vidéo intégrée.
-        </video>
-        <button class="video-toggle" id="videoToggle" type="button" aria-label="Lecture">
-          <svg class="icon-play" viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-          <svg class="icon-pause" viewBox="0 0 24 24" width="26" height="26" hidden><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>
-        </button>
-        <div class="video-bar">
-          <div class="video-bar-track" id="videoBarTrack">
-            <div class="video-bar-fill" id="videoBarFill"></div>
-          </div>
-        </div>
+      <div class="film-ratio">
+        <iframe src="https://drive.google.com/file/d/1oPi1PchzIP4VN4AONZhWWdF4TeHIxeeg/preview" allow="autoplay; fullscreen; encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen title="Notre histoire en images"></iframe>
       </div>
       <div class="sprockets" aria-hidden="true"></div>
     </div>
@@ -968,45 +893,6 @@
           });
           if (closest !== reasonIndex){ reasonIndex = closest; renderDots(); }
         }, 100);
-      }, { passive: true });
-    }
-
-    var storyVideo = document.getElementById('storyVideo');
-    var videoWrap = document.getElementById('videoWrap');
-    var videoToggle = document.getElementById('videoToggle');
-    var videoBarTrack = document.getElementById('videoBarTrack');
-    var videoBarFill = document.getElementById('videoBarFill');
-    if (storyVideo && videoWrap && videoToggle && videoBarTrack && videoBarFill){
-      var iconPlay = videoToggle.querySelector('.icon-play');
-      var iconPause = videoToggle.querySelector('.icon-pause');
-      function setPlayingState(playing){
-        videoWrap.classList.toggle('is-playing', playing);
-        if (iconPlay) iconPlay.hidden = playing;
-        if (iconPause) iconPause.hidden = !playing;
-        videoToggle.setAttribute('aria-label', playing ? 'Pause' : 'Lecture');
-      }
-      function togglePlay(){
-        if (storyVideo.paused){ storyVideo.play(); } else { storyVideo.pause(); }
-      }
-      videoToggle.addEventListener('click', togglePlay);
-      storyVideo.addEventListener('click', togglePlay);
-      storyVideo.addEventListener('play', function(){ setPlayingState(true); });
-      storyVideo.addEventListener('pause', function(){ setPlayingState(false); });
-      storyVideo.addEventListener('ended', function(){ setPlayingState(false); });
-      storyVideo.addEventListener('timeupdate', function(){
-        if (!storyVideo.duration) return;
-        videoBarFill.style.width = (storyVideo.currentTime / storyVideo.duration * 100) + '%';
-      });
-      function seekFromEvent(clientX){
-        var rect = videoBarTrack.getBoundingClientRect();
-        var ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
-        if (storyVideo.duration) storyVideo.currentTime = ratio * storyVideo.duration;
-      }
-      videoBarTrack.addEventListener('click', function(e){
-        seekFromEvent(e.clientX);
-      });
-      videoBarTrack.addEventListener('touchstart', function(e){
-        if (e.touches && e.touches[0]) seekFromEvent(e.touches[0].clientX);
       }, { passive: true });
     }
 
