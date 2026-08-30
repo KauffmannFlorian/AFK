@@ -157,6 +157,13 @@
     0%,100%{transform:scaleY(1); opacity:.5;}
     50%{transform:scaleY(1.3); opacity:1;}
   }
+  .page.prelock .eyebrow,
+  .page.prelock .names,
+  .page.prelock .tagline,
+  .page.prelock .scroll-cue,
+  .page.prelock .scroll-cue span{
+    animation-play-state:paused;
+  }
 
   /* ---------- Shared section rhythm ---------- */
   section, footer.closing{
@@ -210,6 +217,61 @@
   }
   #liveSeconds{color:var(--accent-gold); font-weight:600;}
 
+  /* ---------- Timeline ---------- */
+  .timeline-route{
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--ink-soft);
+    font-size:clamp(1rem, 2vw, 1.15rem);
+    margin:0 0 2.6rem;
+  }
+  .timeline-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    max-width:440px;
+    margin-inline:auto;
+  }
+  .timeline-list li{
+    position:relative;
+    padding:0 0 1.9rem 1.9rem;
+  }
+  .timeline-list li:last-child{padding-bottom:0;}
+  .timeline-list li::before{
+    content:"";
+    position:absolute;
+    left:3px;
+    top:7px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--accent-gold);
+  }
+  .timeline-list li::after{
+    content:"";
+    position:absolute;
+    left:7px;
+    top:16px;
+    bottom:-1.9rem;
+    width:1px;
+    background:var(--hairline);
+  }
+  .timeline-list li:last-child::after{display:none;}
+  .timeline-date{
+    display:block;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:600;
+    color:var(--accent);
+    font-size:1.15rem;
+    margin-bottom:.15rem;
+  }
+  .timeline-text{
+    font-size:.98rem;
+    color:var(--ink);
+  }
+
   /* ---------- Film / video ---------- */
   .film-frame{
     background:var(--hero-1);
@@ -248,12 +310,15 @@
     margin:0 0 1.1em;
     max-width:64ch;
   }
-  .letter-body:first-of-type::first-letter{
-    font-size:3.4em;
+  .letter-body.opening{
+    display:flow-root;
+  }
+  .letter-body.opening::first-letter{
+    font-size:2.5em;
     font-weight:600;
     float:left;
     line-height:.8;
-    padding:.08em .09em 0 0;
+    padding:.05em .07em 0 0;
     color:var(--accent);
   }
   .signature{
@@ -263,6 +328,160 @@
     text-align:right;
     color:var(--accent);
     margin:1.6rem 0 0;
+  }
+
+  /* ---------- 6 proofs of love ---------- */
+  .reasons-carousel{
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    border-radius:2px;
+  }
+  .reasons-carousel::-webkit-scrollbar{display:none;}
+  .reasons-track{
+    display:flex;
+  }
+  .reason-card{
+    flex:0 0 100%;
+    scroll-snap-align:center;
+    background:var(--paper);
+    border:1px solid var(--hairline);
+    border-radius:2px;
+    padding:clamp(2rem, 6vw, 2.8rem);
+    min-height:9rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    box-shadow:0 20px 50px -34px rgba(33,14,23,.35);
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:clamp(1.2rem, 3vw, 1.5rem);
+    line-height:1.6;
+    color:var(--ink);
+  }
+  .reasons-nav{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.7rem;
+    margin-top:1.4rem;
+  }
+  .reasons-dots{
+    display:flex;
+    gap:.5rem;
+  }
+  .reasons-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--hairline);
+    cursor:pointer;
+    transition:background .25s ease, transform .25s ease;
+  }
+  .reasons-dot.active{
+    background:var(--accent);
+    transform:scale(1.3);
+  }
+  .reasons-hint{
+    font-family:'Work Sans', sans-serif;
+    font-size:.78rem;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin:0;
+  }
+
+  /* ---------- Hidden heart & secret message ---------- */
+  .secret-trigger{
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    z-index:15;
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    border:none;
+    background:transparent;
+    color:var(--accent);
+    font-size:1.25rem;
+    opacity:.3;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  .secret-trigger:hover, .secret-trigger:focus-visible{
+    opacity:1;
+    transform:scale(1.12);
+  }
+  .secret-modal{
+    position:fixed;
+    inset:0;
+    z-index:110;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vw;
+    background:rgba(20,10,15,.55);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .35s ease;
+  }
+  .secret-modal.open{
+    opacity:1;
+    visibility:visible;
+  }
+  .secret-card{
+    position:relative;
+    z-index:2;
+    max-width:420px;
+    background:var(--paper);
+    border:1px solid var(--hairline);
+    border-radius:3px;
+    padding:2.6rem 2rem 2.2rem;
+    text-align:center;
+    box-shadow:0 30px 60px -20px rgba(20,10,15,.5);
+    transform:translateY(12px);
+    transition:transform .35s ease;
+  }
+  .secret-modal.open .secret-card{
+    transform:translateY(0);
+  }
+  .secret-close{
+    position:absolute;
+    top:.5rem;
+    right:.7rem;
+    background:none;
+    border:none;
+    font-size:1.4rem;
+    line-height:1;
+    color:var(--ink-soft);
+    cursor:pointer;
+    padding:.4rem;
+  }
+  .secret-label{
+    color:var(--accent-gold);
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:.7rem;
+    font-weight:600;
+    margin:0 0 1rem;
+  }
+  .secret-text{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.25rem;
+    line-height:1.7;
+    color:var(--ink);
+    margin:0;
+  }
+  .fireworks-canvas{
+    position:fixed;
+    inset:0;
+    z-index:5;
+    pointer-events:none;
   }
 
   /* ---------- Closing ---------- */
@@ -312,15 +531,104 @@
     10%{ opacity:.9; }
     100%{ transform:translateY(112vh) translateX(var(--drift)) rotate(var(--rot)); opacity:0; }
   }
+
+  /* ---------- Entry gate ---------- */
+  .gate{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:8vw;
+    text-align:center;
+    background:
+      radial-gradient(120% 90% at 50% 0%, var(--hero-3) 0%, var(--hero-2) 45%, var(--hero-1) 100%);
+    color:var(--hero-ink);
+    transition:opacity .7s ease;
+  }
+  .gate.unlocked{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  .gate-card{
+    max-width:360px;
+  }
+  .gate-eyebrow{
+    color:var(--accent-gold);
+    margin:0 0 1rem;
+  }
+  .gate-prompt{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:clamp(1.3rem, 4vw, 1.7rem);
+    margin:0 0 1.6rem;
+  }
+  .gate-form{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.9rem;
+  }
+  .gate-input{
+    width:100%;
+    max-width:240px;
+    text-align:center;
+    background:rgba(247,236,228,.08);
+    border:1px solid rgba(247,236,228,.35);
+    border-radius:2px;
+    color:var(--hero-ink);
+    font-family:'Work Sans', sans-serif;
+    font-size:1rem;
+    letter-spacing:.08em;
+    padding:.7rem .9rem;
+  }
+  .gate-input::placeholder{color:rgba(247,236,228,.5);}
+  .gate-input:focus-visible{outline:2px solid var(--accent-gold); outline-offset:2px;}
+  .gate-submit{
+    background:transparent;
+    border:1px solid var(--accent-gold);
+    color:var(--hero-ink);
+    font-family:'Work Sans', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:.75rem;
+    font-weight:600;
+    padding:.75rem 1.6rem;
+    border-radius:2px;
+    cursor:pointer;
+    transition:background .25s ease;
+  }
+  .gate-submit:hover{background:rgba(247,236,228,.1);}
+  .gate-hint{
+    margin:1rem 0 0;
+    font-size:.85rem;
+    color:rgba(247,236,228,.6);
+    min-height:1.2em;
+  }
 </style>
 </head>
 <body>
-<div class="page">
+<div class="page prelock" id="page">
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <p class="gate-eyebrow">Alia &amp; Florian</p>
+      <p class="gate-prompt">Quelle est notre date ?</p>
+      <form class="gate-form" id="gateForm" autocomplete="off">
+        <input class="gate-input" id="gateInput" type="text" inputmode="numeric" placeholder="JJ/MM/AAAA" aria-label="Notre date">
+        <button class="gate-submit" type="submit">Ouvrir</button>
+      </form>
+      <p class="gate-hint" id="gateHint" aria-live="polite"></p>
+    </div>
+  </div>
+
   <div class="heart-rain" id="heartRain" aria-hidden="true"></div>
 
   <header class="hero">
     <p class="eyebrow">31 août 2020 · 31 août 2026</p>
-    <h1 class="names"><span>Alia</span><span class="amp">&amp;</span><span>Florian</span></h1>
+    <h1 class="names"><span>Alia</span><span class="amp">&#9825;</span><span>Florian</span></h1>
     <p class="tagline">Six ans, et toute une vie devant nous.</p>
     <div class="scroll-cue" aria-hidden="true"><span></span></div>
   </header>
@@ -329,6 +637,19 @@
     <p class="counter-label">Ensemble depuis</p>
     <p class="counter-number" id="daysTogether">…</p>
     <p class="counter-sub">Et <span id="liveSeconds">…</span> secondes, là, maintenant.</p>
+  </section>
+
+  <section class="timeline" data-reveal>
+    <p class="section-label">Notre chemin</p>
+    <p class="timeline-route">De Croix à Dubaï, en passant par Wasquehal, Tourcoing, Ensuès-la-Redonne et Marseille.</p>
+    <ol class="timeline-list">
+      <li><span class="timeline-date">27 mai 2019</span><span class="timeline-text">Le début de nous.</span></li>
+      <li><span class="timeline-date">31 août 2020</span><span class="timeline-text">On s'est dit oui devant Allah, exalté soit-Il (الله تعالى).</span></li>
+      <li><span class="timeline-date">25 octobre 2022</span><span class="timeline-text">Naissance de Kamila Bella.</span></li>
+      <li><span class="timeline-date">9 avril 2025</span><span class="timeline-text">On s'est dit oui civilement.</span></li>
+      <li><span class="timeline-date">5 juillet 2025</span><span class="timeline-text">Naissance de Khalis Braheem.</span></li>
+      <li><span class="timeline-date">31 août 2026</span><span class="timeline-text">Six ans, et toute une vie de plus à construire, tous les quatre.</span></li>
+    </ol>
   </section>
 
   <section class="film" data-reveal>
@@ -343,7 +664,7 @@
   <section class="letter" data-reveal>
     <p class="section-label">Pour toi</p>
     <div class="letter-card">
-      <p class="letter-body">Mon petit bonbon rose,</p>
+      <p class="letter-body opening">Mon petit bonbon rose,</p>
       <p class="letter-body">Six ans. Six ans que j'ai dit oui à la plus belle des aventures : la nôtre.</p>
       <p class="letter-body">De Croix à Wasquehal, de Wasquehal à Tourcoing, puis d'Ensuès-la-Redonne à Marseille et enfin jusqu'à Dubaï : depuis notre rencontre, nous n'avons jamais cessé d'avancer, de ville en ville, toujours main dans la main.</p>
       <p class="letter-body">Et puis il y a eu Kamila Bella, le 25 octobre 2022, et Khalis Braheem, le 5 juillet 2025, deux petits cœurs qui ont fait de notre histoire une famille, et de chacun de nos jours un émerveillement de plus.</p>
@@ -355,6 +676,35 @@
       <p class="signature">Florian</p>
     </div>
   </section>
+
+  <section class="reasons" data-reveal>
+    <p class="section-label">Six preuves d'amour</p>
+    <div class="reasons-carousel" id="reasonsCarousel">
+      <div class="reasons-track" id="reasonsTrack">
+        <div class="reason-card">Parce que tu es la meilleure des mamans pour Kamila et Khalis, et que je vous regarde grandir tous les trois avec une fierté immense.</div>
+        <div class="reason-card">Parce que tu me pousses sans cesse à sortir de ma zone de confort, à oser, à avancer là où je ne serais jamais allé seul.</div>
+        <div class="reason-card">Parce que peu importe la ville où on atterrit, tu fais de chaque maison un chez-nous.</div>
+        <div class="reason-card">Parce que tu prends soin de tout le monde, de Nala à Kara en passant par nous quatre, sans jamais rien attendre en retour.</div>
+        <div class="reason-card">Parce que même dans les tempêtes, tu restes debout, et tu me donnes envie de l'être aussi.</div>
+        <div class="reason-card">Parce qu'après six ans, je peux te le dire sans hésiter une seconde : tu es la meilleure des femmes.</div>
+      </div>
+    </div>
+    <div class="reasons-nav">
+      <div class="reasons-dots" id="reasonsDots" aria-hidden="true"></div>
+      <p class="reasons-hint">Glisse vers les côtés pour découvrir la suivante →</p>
+    </div>
+  </section>
+
+  <button class="secret-trigger" id="secretTrigger" type="button" aria-haspopup="dialog" aria-controls="secretModal" aria-label="Un secret">♥</button>
+
+  <div class="secret-modal" id="secretModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <canvas class="fireworks-canvas" id="fireworksCanvas" aria-hidden="true"></canvas>
+    <div class="secret-card">
+      <button class="secret-close" id="secretClose" type="button" aria-label="Fermer">×</button>
+      <p class="secret-label">Un secret, juste pour toi</p>
+      <p class="secret-text">Il y a des choses que je ne dis jamais assez fort. Alors les voilà, écrites : tu es le plus beau "oui" de ma vie, et s'il fallait tout recommencer, depuis Croix jusqu'à Dubaï, je te choisirais encore, à chaque fois, sans hésiter une seconde.</p>
+    </div>
+  </div>
 
   <footer class="closing" data-reveal>
     <div class="rings" aria-hidden="true">
@@ -385,30 +735,240 @@
     setInterval(updateCounters, 1000);
 
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     var heartRain = document.getElementById('heartRain');
-    if (heartRain && !reduceMotion){
-      var colors = ['var(--accent)', 'var(--accent-gold)'];
-      var count = window.innerWidth < 600 ? 16 : 28;
+
+    function spawnHearts(){
+      if (!heartRain || reduceMotion) { if (heartRain) heartRain.remove(); return; }
+      var colors = ['var(--accent)', 'var(--accent-gold)', 'var(--accent-2, var(--accent))'];
+      var count = window.innerWidth < 600 ? 34 : 60;
       for (var i = 0; i < count; i++){
         var heart = document.createElement('span');
         heart.className = 'heart';
         heart.textContent = '♥';
         heart.style.setProperty('--x', (Math.random() * 100) + 'vw');
-        heart.style.setProperty('--size', (14 + Math.random() * 18) + 'px');
+        heart.style.setProperty('--size', (12 + Math.random() * 24) + 'px');
         heart.style.setProperty('--c', colors[i % colors.length]);
-        heart.style.setProperty('--dur', (4 + Math.random() * 2.5) + 's');
-        heart.style.setProperty('--delay', (Math.random() * 2.8) + 's');
-        heart.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+        heart.style.setProperty('--dur', (4 + Math.random() * 3) + 's');
+        heart.style.setProperty('--delay', (Math.random() * 3.6) + 's');
+        heart.style.setProperty('--drift', (Math.random() * 100 - 50) + 'px');
         heart.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
         heartRain.appendChild(heart);
       }
       setTimeout(function(){
         if (heartRain && heartRain.parentNode){ heartRain.parentNode.removeChild(heartRain); }
-      }, 8000);
-    } else if (heartRain){
-      heartRain.remove();
+      }, 11000);
     }
+
+    var ANSWERS = ['31082020'];
+    var page = document.getElementById('page');
+    var gate = document.getElementById('gate');
+    var gateForm = document.getElementById('gateForm');
+    var gateInput = document.getElementById('gateInput');
+    var gateHint = document.getElementById('gateHint');
+    var unlocked = false;
+
+    function unlockSite(){
+      if (unlocked) return;
+      unlocked = true;
+      if (gate) gate.classList.add('unlocked');
+      if (page) page.classList.remove('prelock');
+      spawnHearts();
+    }
+
+    if (gateForm){
+      gateForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        var raw = (gateInput.value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (ANSWERS.indexOf(raw) !== -1){
+          unlockSite();
+        } else if (gateHint){
+          gateHint.textContent = 'Essaie encore, mon cœur.';
+          if (gateInput){ gateInput.value=''; gateInput.focus(); }
+        }
+      });
+    }
+    if (gateInput){ setTimeout(function(){ gateInput.focus(); }, 300); }
+
+    var reasonsCarousel = document.getElementById('reasonsCarousel');
+    var reasonsTrack = document.getElementById('reasonsTrack');
+    var reasonsDots = document.getElementById('reasonsDots');
+    var reasonCards = reasonsTrack ? Array.prototype.slice.call(reasonsTrack.children) : [];
+    var reasonIndex = 0;
+
+    function renderDots(){
+      if (!reasonsDots) return;
+      reasonsDots.innerHTML = '';
+      reasonCards.forEach(function(_, i){
+        var dot = document.createElement('span');
+        dot.className = 'reasons-dot' + (i === reasonIndex ? ' active' : '');
+        reasonsDots.appendChild(dot);
+      });
+    }
+    function goToReason(i){
+      if (!reasonCards[i]) return;
+      reasonCards[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+    }
+    renderDots();
+    if (reasonsDots){
+      reasonsDots.addEventListener('click', function(e){
+        var idx = Array.prototype.indexOf.call(reasonsDots.children, e.target);
+        if (idx !== -1) goToReason(idx);
+      });
+    }
+    if (reasonsCarousel && reasonCards.length){
+      var reasonsScrollTimer = null;
+      reasonsCarousel.addEventListener('scroll', function(){
+        if (reasonsScrollTimer) clearTimeout(reasonsScrollTimer);
+        reasonsScrollTimer = setTimeout(function(){
+          var box = reasonsCarousel.getBoundingClientRect();
+          var center = box.left + box.width / 2;
+          var closest = 0, closestDist = Infinity;
+          reasonCards.forEach(function(card, i){
+            var r = card.getBoundingClientRect();
+            var dist = Math.abs((r.left + r.width / 2) - center);
+            if (dist < closestDist){ closestDist = dist; closest = i; }
+          });
+          if (closest !== reasonIndex){ reasonIndex = closest; renderDots(); }
+        }, 100);
+      }, { passive: true });
+    }
+
+    function getVar(name){
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    var fireworksCanvas = document.getElementById('fireworksCanvas');
+    var fireworksCtx = null;
+    var fireworksParticles = [];
+    var fireworksFlashes = [];
+    var fireworksRAF = null;
+
+    function ensureFireworksCanvas(){
+      if (!fireworksCanvas) return null;
+      if (!fireworksCtx){
+        fireworksCtx = fireworksCanvas.getContext('2d');
+        function resize(){
+          fireworksCanvas.width = window.innerWidth;
+          fireworksCanvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+      }
+      return fireworksCtx;
+    }
+
+    function spawnBurst(x, y){
+      var colors = [getVar('--accent'), getVar('--accent-gold'), getVar('--ring-violet'), getVar('--ring-green')].filter(Boolean);
+      if (!colors.length) colors = ['#8C2F45'];
+      var count = 52;
+      for (var i = 0; i < count; i++){
+        var angle = (Math.PI * 2 * i) / count + Math.random() * 0.3;
+        var speed = 2.5 + Math.random() * 5;
+        fireworksParticles.push({
+          x: x, y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          alpha: 1,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          size: 2 + Math.random() * 2.8
+        });
+      }
+      fireworksFlashes.push({ x: x, y: y, r: 4, alpha: .9, color: colors[Math.floor(Math.random() * colors.length)] });
+    }
+
+    function tickFireworks(){
+      if (!fireworksCtx) return;
+      var canvas = fireworksCtx.canvas;
+      fireworksCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+      fireworksFlashes.forEach(function(f){
+        f.r += 3.4;
+        f.alpha -= 0.045;
+      });
+      fireworksFlashes = fireworksFlashes.filter(function(f){ return f.alpha > 0; });
+      fireworksFlashes.forEach(function(f){
+        fireworksCtx.globalAlpha = Math.max(f.alpha, 0);
+        fireworksCtx.strokeStyle = f.color;
+        fireworksCtx.lineWidth = 2;
+        fireworksCtx.beginPath();
+        fireworksCtx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        fireworksCtx.stroke();
+      });
+
+      fireworksParticles.forEach(function(p){
+        p.vy += 0.045;
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= 0.009;
+      });
+      fireworksParticles = fireworksParticles.filter(function(p){ return p.alpha > 0; });
+      fireworksParticles.forEach(function(p){
+        fireworksCtx.globalAlpha = Math.max(p.alpha, 0);
+        fireworksCtx.fillStyle = p.color;
+        fireworksCtx.shadowColor = p.color;
+        fireworksCtx.shadowBlur = 12;
+        fireworksCtx.beginPath();
+        fireworksCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        fireworksCtx.fill();
+      });
+      fireworksCtx.shadowBlur = 0;
+      fireworksCtx.globalAlpha = 1;
+      fireworksRAF = (fireworksParticles.length || fireworksFlashes.length) ? requestAnimationFrame(tickFireworks) : null;
+    }
+
+    function launchFireworks(){
+      if (reduceMotion) return;
+      var ctx = ensureFireworksCanvas();
+      if (!ctx) return;
+      var canvas = ctx.canvas;
+      var bursts = 7;
+      for (var b = 0; b < bursts; b++){
+        (function(delay){
+          setTimeout(function(){
+            var x = canvas.width * (0.12 + Math.random() * 0.76);
+            var y = canvas.height * (0.15 + Math.random() * 0.5);
+            spawnBurst(x, y);
+            if (!fireworksRAF) fireworksRAF = requestAnimationFrame(tickFireworks);
+          }, delay);
+        })(b * 230);
+      }
+    }
+
+    var secretTrigger = document.getElementById('secretTrigger');
+    var secretModal = document.getElementById('secretModal');
+    var secretClose = document.getElementById('secretClose');
+    function openSecret(){
+      if (secretModal){ secretModal.classList.add('open'); secretModal.setAttribute('aria-hidden', 'false'); }
+      launchFireworks();
+    }
+    function closeSecret(){
+      if (secretModal){ secretModal.classList.remove('open'); secretModal.setAttribute('aria-hidden', 'true'); }
+    }
+    if (secretTrigger){
+      secretTrigger.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        openSecret();
+      });
+    }
+    if (secretClose){
+      secretClose.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        closeSecret();
+      });
+    }
+    if (secretModal){
+      secretModal.addEventListener('click', function(e){
+        e.stopPropagation();
+        if (e.target === secretModal) closeSecret();
+      });
+    }
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeSecret();
+    });
 
     var els = document.querySelectorAll('[data-reveal]');
     if (!reduceMotion && 'IntersectionObserver' in window){
