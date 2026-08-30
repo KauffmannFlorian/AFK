@@ -177,6 +177,14 @@
     text-align:center;
     margin:0 0 .9rem;
   }
+  .section-label .label-hearts{
+    display:inline-block;
+    margin-left:.4em;
+    letter-spacing:.14em;
+    color:var(--accent-gold);
+    font-size:.62em;
+    vertical-align:.14em;
+  }
   [data-reveal]{
     opacity:0;
     transform:translateY(26px);
@@ -291,9 +299,21 @@
     display:block;
     width:100%;
     aspect-ratio:16/9;
+    min-height:220px;
     border:0;
     background:#000;
   }
+  .film-fallback{
+    text-align:center;
+    margin:.9rem 0 0;
+    font-size:.82rem;
+  }
+  .film-fallback a{
+    color:var(--ink-soft);
+    text-decoration:underline;
+    text-underline-offset:.15em;
+  }
+  .film-fallback a:hover{color:var(--accent);}
 
   /* ---------- Letter ---------- */
   .letter-card{
@@ -367,6 +387,36 @@
     align-items:center;
     gap:.7rem;
     margin-top:1.4rem;
+  }
+  .reasons-controls{
+    display:flex;
+    align-items:center;
+    gap:1.1rem;
+  }
+  .reasons-arrow{
+    flex:none;
+    width:2.3rem;
+    height:2.3rem;
+    border-radius:50%;
+    border:1px solid var(--hairline);
+    background:var(--paper);
+    color:var(--accent);
+    font-family:'Cormorant Garamond', serif;
+    font-size:1.35rem;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .25s ease, color .25s ease, border-color .25s ease, transform .2s ease;
+  }
+  .reasons-arrow:hover{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:var(--paper);
+  }
+  .reasons-arrow:active{
+    transform:scale(.9);
   }
   .reasons-dots{
     display:flex;
@@ -629,7 +679,7 @@
   <header class="hero">
     <p class="eyebrow">31 août 2020 · 31 août 2026</p>
     <h1 class="names"><span>Alia</span><span class="amp">&#9825;</span><span>Florian</span></h1>
-    <p class="tagline">Six ans, et toute une vie devant nous.</p>
+    <p class="tagline">Six ans, et toute une vie devant nous, in shâ Allah.</p>
     <div class="scroll-cue" aria-hidden="true"><span></span></div>
   </header>
 
@@ -656,16 +706,17 @@
     <p class="section-label">Notre histoire en images</p>
     <div class="film-frame">
       <div class="sprockets" aria-hidden="true"></div>
-      <iframe src="https://drive.google.com/file/d/1oPi1PchzIP4VN4AONZhWWdF4TeHIxeeg/preview" allow="autoplay" allowfullscreen title="Notre histoire en images"></iframe>
+      <iframe src="https://drive.google.com/file/d/1oPi1PchzIP4VN4AONZhWWdF4TeHIxeeg/preview" allow="autoplay; fullscreen; encrypted-media" allowfullscreen webkitallowfullscreen mozallowfullscreen loading="lazy" title="Notre histoire en images"></iframe>
       <div class="sprockets" aria-hidden="true"></div>
     </div>
+    <p class="film-fallback"><a href="https://drive.google.com/file/d/1oPi1PchzIP4VN4AONZhWWdF4TeHIxeeg/view" target="_blank" rel="noopener">La vidéo ne s'affiche pas bien ? Ouvrir dans Drive →</a></p>
   </section>
 
   <section class="letter" data-reveal>
     <p class="section-label">Pour toi</p>
     <div class="letter-card">
       <p class="letter-body opening">Mon petit bonbon rose,</p>
-      <p class="letter-body">Six ans. Six ans que j'ai dit oui à la plus belle des aventures : la nôtre.</p>
+      <p class="letter-body">Six ans. Six ans que j'ai dit oui à la plus belle des histoires d'amour : la nôtre.</p>
       <p class="letter-body">De Croix à Wasquehal, de Wasquehal à Tourcoing, puis d'Ensuès-la-Redonne à Marseille et enfin jusqu'à Dubaï : depuis notre rencontre, nous n'avons jamais cessé d'avancer, de ville en ville, toujours main dans la main.</p>
       <p class="letter-body">Et puis il y a eu Kamila Bella, le 25 octobre 2022, et Khalis Braheem, le 5 juillet 2025, deux petits cœurs qui ont fait de notre histoire une famille, et de chacun de nos jours un émerveillement de plus.</p>
       <p class="letter-body">Nos chats aussi ont fait partie de cette histoire : Xena et Zlatan, partis trop tôt mais toujours quelque part dans notre cœur, et Nala et Kara, qui veillent aujourd'hui sur notre petite famille.</p>
@@ -678,20 +729,23 @@
   </section>
 
   <section class="reasons" data-reveal>
-    <p class="section-label">Six preuves d'amour</p>
+    <p class="section-label">Je t'aime parce que<span class="label-hearts" aria-hidden="true">&#9829;&#9829;&#9829;</span></p>
     <div class="reasons-carousel" id="reasonsCarousel">
       <div class="reasons-track" id="reasonsTrack">
-        <div class="reason-card">Parce que tu es la meilleure des mamans pour Kamila et Khalis, et que je vous regarde grandir tous les trois avec une fierté immense.</div>
-        <div class="reason-card">Parce que tu me pousses sans cesse à sortir de ma zone de confort, à oser, à avancer là où je ne serais jamais allé seul.</div>
-        <div class="reason-card">Parce que peu importe la ville où on atterrit, tu fais de chaque maison un chez-nous.</div>
-        <div class="reason-card">Parce que tu prends soin de tout le monde, de Nala à Kara en passant par nous quatre, sans jamais rien attendre en retour.</div>
-        <div class="reason-card">Parce que même dans les tempêtes, tu restes debout, et tu me donnes envie de l'être aussi.</div>
-        <div class="reason-card">Parce qu'après six ans, je peux te le dire sans hésiter une seconde : tu es la meilleure des femmes.</div>
+        <div class="reason-card">Tu es la meilleure des mamans pour Kamila et Khalis, et je vous regarde grandir tous les trois avec une fierté immense.</div>
+        <div class="reason-card">Tu me pousses sans cesse à sortir de ma zone de confort, à oser, à avancer là où je ne serais jamais allé seul.</div>
+        <div class="reason-card">Peu importe la ville où on atterrit, tu fais de chaque maison un chez-nous.</div>
+        <div class="reason-card">Tu prends soin de tout le monde, de Nala à Kara en passant par nous quatre, sans jamais rien attendre en retour.</div>
+        <div class="reason-card">Même dans les tempêtes, tu restes debout, et tu me donnes envie de l'être aussi.</div>
+        <div class="reason-card">Après six ans, je peux te le dire sans hésiter une seconde : tu es la meilleure des femmes.</div>
       </div>
     </div>
     <div class="reasons-nav">
-      <div class="reasons-dots" id="reasonsDots" aria-hidden="true"></div>
-      <p class="reasons-hint">Glisse vers les côtés pour découvrir la suivante →</p>
+      <div class="reasons-controls">
+        <button class="reasons-arrow" id="reasonsPrev" type="button" aria-label="Raison précédente">&#8249;</button>
+        <div class="reasons-dots" id="reasonsDots" aria-hidden="true"></div>
+        <button class="reasons-arrow" id="reasonsNext" type="button" aria-label="Raison suivante">&#8250;</button>
+      </div>
     </div>
   </section>
 
@@ -813,6 +867,18 @@
       reasonsDots.addEventListener('click', function(e){
         var idx = Array.prototype.indexOf.call(reasonsDots.children, e.target);
         if (idx !== -1) goToReason(idx);
+      });
+    }
+    var reasonsPrev = document.getElementById('reasonsPrev');
+    var reasonsNext = document.getElementById('reasonsNext');
+    if (reasonsPrev && reasonCards.length){
+      reasonsPrev.addEventListener('click', function(){
+        goToReason((reasonIndex - 1 + reasonCards.length) % reasonCards.length);
+      });
+    }
+    if (reasonsNext && reasonCards.length){
+      reasonsNext.addEventListener('click', function(){
+        goToReason((reasonIndex + 1) % reasonCards.length);
       });
     }
     if (reasonsCarousel && reasonCards.length){
