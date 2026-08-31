@@ -1560,33 +1560,74 @@
       var ctx = getAudioCtx();
       if (!ctx || reduceMotion) return;
       var now = ctx.currentTime;
-      var bufferSize = Math.floor(ctx.sampleRate * 0.3);
-      var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      var data = buffer.getChannelData(0);
-      for (var i = 0; i < bufferSize; i++){ data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2); }
-      var noise = ctx.createBufferSource();
-      noise.buffer = buffer;
-      var bandpass = ctx.createBiquadFilter();
-      bandpass.type = 'bandpass';
-      bandpass.frequency.value = 1000 + Math.random() * 900;
-      bandpass.Q.value = 0.8;
-      var gain = ctx.createGain();
-      gain.gain.setValueAtTime(0.3, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-      noise.connect(bandpass).connect(gain).connect(ctx.destination);
-      noise.start(now);
-      noise.stop(now + 0.32);
+      var vary = Math.random();
 
-      var osc = ctx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(850, now);
-      osc.frequency.exponentialRampToValueAtTime(110, now + 0.38);
-      var oGain = ctx.createGain();
-      oGain.gain.setValueAtTime(0.13, now);
-      oGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-      osc.connect(oGain).connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.38);
+      /* crack : transitoire sec et brillant, l'impact de l'explosion */
+      var crackDur = 0.07;
+      var crackBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * crackDur), ctx.sampleRate);
+      var cd = crackBuf.getChannelData(0);
+      for (var i = 0; i < cd.length; i++){ cd[i] = Math.random() * 2 - 1; }
+      var crackSrc = ctx.createBufferSource();
+      crackSrc.buffer = crackBuf;
+      var crackFilter = ctx.createBiquadFilter();
+      crackFilter.type = 'highpass';
+      crackFilter.frequency.value = 1600 + vary * 800;
+      var crackGain = ctx.createGain();
+      crackGain.gain.setValueAtTime(0.4, now);
+      crackGain.gain.exponentialRampToValueAtTime(0.001, now + crackDur);
+      crackSrc.connect(crackFilter).connect(crackGain).connect(ctx.destination);
+      crackSrc.start(now);
+      crackSrc.stop(now + crackDur);
+
+      /* body : souffle large-bande qui s'assombrit vite, le corps du "boum" */
+      var bodyDur = 0.4;
+      var bodyBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * bodyDur), ctx.sampleRate);
+      var bd = bodyBuf.getChannelData(0);
+      for (var i = 0; i < bd.length; i++){ bd[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bd.length, 1.4); }
+      var bodySrc = ctx.createBufferSource();
+      bodySrc.buffer = bodyBuf;
+      var bodyFilter = ctx.createBiquadFilter();
+      bodyFilter.type = 'lowpass';
+      bodyFilter.frequency.setValueAtTime(2400, now);
+      bodyFilter.frequency.exponentialRampToValueAtTime(280, now + bodyDur);
+      var bodyGain = ctx.createGain();
+      bodyGain.gain.setValueAtTime(0.5, now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.001, now + bodyDur);
+      bodySrc.connect(bodyFilter).connect(bodyGain).connect(ctx.destination);
+      bodySrc.start(now);
+      bodySrc.stop(now + bodyDur);
+
+      /* boom : coup grave qui donne le poids de l'explosion */
+      var boomOsc = ctx.createOscillator();
+      boomOsc.type = 'sine';
+      boomOsc.frequency.setValueAtTime(140 + vary * 40, now);
+      boomOsc.frequency.exponentialRampToValueAtTime(32, now + 0.32);
+      var boomGain = ctx.createGain();
+      boomGain.gain.setValueAtTime(0.55, now);
+      boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+      boomOsc.connect(boomGain).connect(ctx.destination);
+      boomOsc.start(now);
+      boomOsc.stop(now + 0.4);
+
+      /* crépitement : étincelles qui crépitent après l'explosion */
+      var tailDur = 0.9;
+      var tailBuf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * tailDur), ctx.sampleRate);
+      var td = tailBuf.getChannelData(0);
+      for (var i = 0; i < td.length; i++){ td[i] = (Math.random() < 0.09) ? (Math.random() * 2 - 1) : 0; }
+      var tailSrc = ctx.createBufferSource();
+      tailSrc.buffer = tailBuf;
+      var tailFilter = ctx.createBiquadFilter();
+      tailFilter.type = 'bandpass';
+      tailFilter.frequency.setValueAtTime(3800, now);
+      tailFilter.frequency.exponentialRampToValueAtTime(1000, now + tailDur);
+      tailFilter.Q.value = 1;
+      var tailGain = ctx.createGain();
+      tailGain.gain.setValueAtTime(0.001, now);
+      tailGain.gain.linearRampToValueAtTime(0.3, now + 0.06);
+      tailGain.gain.exponentialRampToValueAtTime(0.001, now + tailDur);
+      tailSrc.connect(tailFilter).connect(tailGain).connect(ctx.destination);
+      tailSrc.start(now);
+      tailSrc.stop(now + tailDur);
     }
 
     function spawnHearts(){
