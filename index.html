@@ -315,11 +315,14 @@
     position:relative;
     background:#000;
     line-height:0;
+    aspect-ratio:4 / 3;
+    overflow:hidden;
   }
   .video-wrap video{
     display:block;
     width:100%;
-    height:auto;
+    height:100%;
+    object-fit:contain;
     border:0;
     background:#000;
   }
@@ -343,7 +346,6 @@
   .video-toggle:hover{background:rgba(33,14,23,.75);}
   .video-toggle .icon-play{margin-left:3px;}
   .video-toggle svg[hidden]{display:none;}
-  .video-wrap video{min-height:220px;}
   .video-error{
     position:absolute;
     inset:0;
@@ -1486,8 +1488,110 @@
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var heartRain = document.getElementById('heartRain');
 
+    /* ---------- Sons (synthétisés, sans fichier externe) ---------- */
+    var audioCtx = null;
+    function getAudioCtx(){
+      try {
+        if (!audioCtx){ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+        if (audioCtx.state === 'suspended'){ audioCtx.resume(); }
+        return audioCtx;
+      } catch(e){ return null; }
+    }
+
+    function playDoorSound(){
+      var ctx = getAudioCtx();
+      if (!ctx || reduceMotion) return;
+      var now = ctx.currentTime;
+      var dur = 1.7;
+      var bufferSize = Math.floor(ctx.sampleRate * dur);
+      var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      var data = buffer.getChannelData(0);
+      for (var i = 0; i < bufferSize; i++){ data[i] = Math.random() * 2 - 1; }
+      var noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      var filter = ctx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(180, now);
+      filter.frequency.linearRampToValueAtTime(700, now + dur * 0.45);
+      filter.frequency.linearRampToValueAtTime(140, now + dur);
+      filter.Q.value = 1.1;
+      var gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.1, now + 0.3);
+      gain.gain.linearRampToValueAtTime(0.06, now + dur * 0.7);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+      noise.connect(filter).connect(gain).connect(ctx.destination);
+      noise.start(now);
+      noise.stop(now + dur);
+
+      var clickOsc = ctx.createOscillator();
+      clickOsc.type = 'sine';
+      clickOsc.frequency.setValueAtTime(190, now);
+      clickOsc.frequency.exponentialRampToValueAtTime(65, now + 0.16);
+      var clickGain = ctx.createGain();
+      clickGain.gain.setValueAtTime(0.22, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+      clickOsc.connect(clickGain).connect(ctx.destination);
+      clickOsc.start(now);
+      clickOsc.stop(now + 0.2);
+    }
+
+    function playSparkleChime(){
+      var ctx = getAudioCtx();
+      if (!ctx || reduceMotion) return;
+      var now = ctx.currentTime;
+      var notes = [784, 988, 1175, 1568];
+      notes.forEach(function(freq, idx){
+        var t = now + idx * 0.11;
+        var osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        var g = ctx.createGain();
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.1, t + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.001, t + 0.85);
+        osc.connect(g).connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.85);
+      });
+    }
+
+    function playFireworkPop(){
+      var ctx = getAudioCtx();
+      if (!ctx || reduceMotion) return;
+      var now = ctx.currentTime;
+      var bufferSize = Math.floor(ctx.sampleRate * 0.3);
+      var buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      var data = buffer.getChannelData(0);
+      for (var i = 0; i < bufferSize; i++){ data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2); }
+      var noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      var bandpass = ctx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.frequency.value = 1000 + Math.random() * 900;
+      bandpass.Q.value = 0.8;
+      var gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+      noise.connect(bandpass).connect(gain).connect(ctx.destination);
+      noise.start(now);
+      noise.stop(now + 0.32);
+
+      var osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(850, now);
+      osc.frequency.exponentialRampToValueAtTime(110, now + 0.38);
+      var oGain = ctx.createGain();
+      oGain.gain.setValueAtTime(0.13, now);
+      oGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+      osc.connect(oGain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.38);
+    }
+
     function spawnHearts(){
       if (!heartRain || reduceMotion) { if (heartRain) heartRain.remove(); return; }
+      playSparkleChime();
       var colors = ['var(--accent)', 'var(--accent-gold)', 'var(--accent-2, var(--accent))'];
       var count = window.innerWidth < 600 ? 34 : 60;
       for (var i = 0; i < count; i++){
@@ -1524,6 +1628,7 @@
         if (gate) gate.classList.add('opening');
         if (page) page.classList.add('entering');
         if (page) page.classList.remove('prelock');
+        playDoorSound();
         spawnHearts();
       }, 450);
       setTimeout(function(){
@@ -1533,9 +1638,19 @@
 
     var gateKey = document.getElementById('gateKey');
     var gateLockBtn = document.getElementById('gateLockBtn');
+    if (gateInput){
+      gateInput.addEventListener('input', function(){
+        var digits = gateInput.value.replace(/[^0-9]/g, '').slice(0, 8);
+        var out = digits;
+        if (digits.length > 4){ out = digits.slice(0,2) + '/' + digits.slice(2,4) + '/' + digits.slice(4); }
+        else if (digits.length > 2){ out = digits.slice(0,2) + '/' + digits.slice(2); }
+        gateInput.value = out;
+      });
+    }
     if (gateForm){
       gateForm.addEventListener('submit', function(e){
         e.preventDefault();
+        getAudioCtx();
         if (unlocked) return;
         var raw = (gateInput.value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
         if (ANSWERS.indexOf(raw) !== -1){
@@ -1773,6 +1888,7 @@
             var x = canvas.width * (0.12 + Math.random() * 0.76);
             var y = canvas.height * (0.15 + Math.random() * 0.5);
             spawnBurst(x, y);
+            playFireworkPop();
             if (!fireworksRAF) fireworksRAF = requestAnimationFrame(tickFireworks);
           }, delay);
         })(b * 230);
@@ -1793,6 +1909,7 @@
       secretTrigger.addEventListener('click', function(e){
         e.preventDefault();
         e.stopPropagation();
+        getAudioCtx();
         openSecret();
       });
     }
