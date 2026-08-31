@@ -343,9 +343,27 @@
     font-size:1.05rem;
     color:var(--hero-ink);
   }
-  .video-wrap.is-playing .video-toggle{opacity:0;}
-  .video-wrap.is-playing:hover .video-toggle,
-  .video-wrap.is-playing:focus-within .video-toggle{opacity:1;}
+  .video-wrap.is-playing .video-toggle{opacity:0; pointer-events:none;}
+  .video-fullscreen{
+    position:absolute;
+    top:.6rem;
+    right:.6rem;
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    border:0;
+    padding:0;
+    background:rgba(33,14,23,.55);
+    color:var(--hero-ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .2s ease;
+    z-index:2;
+  }
+  .video-fullscreen:hover{background:rgba(33,14,23,.75);}
+  .video-fullscreen svg[hidden]{display:none;}
   .video-bar{
     position:absolute;
     left:0;
@@ -789,6 +807,9 @@
           <svg class="icon-play" viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
           <svg class="icon-pause" viewBox="0 0 24 24" width="26" height="26" hidden><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>
         </button>
+        <button class="video-fullscreen" id="videoFullscreen" type="button" aria-label="Plein écran">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
         <div class="video-bar">
           <div class="video-bar-track" id="videoBarTrack">
             <div class="video-bar-fill" id="videoBarFill"></div>
@@ -989,6 +1010,7 @@
     var storyVideo = document.getElementById('storyVideo');
     var videoWrap = document.getElementById('videoWrap');
     var videoToggle = document.getElementById('videoToggle');
+    var videoFullscreen = document.getElementById('videoFullscreen');
     var videoBarTrack = document.getElementById('videoBarTrack');
     var videoBarFill = document.getElementById('videoBarFill');
     if (storyVideo && videoWrap && videoToggle && videoBarTrack && videoBarFill){
@@ -1018,6 +1040,14 @@
           storyVideo.pause();
         }
       }
+      function enterFullscreen(e){
+        if (e) e.stopPropagation();
+        if (storyVideo.requestFullscreen) storyVideo.requestFullscreen();
+        else if (storyVideo.webkitEnterFullscreen) storyVideo.webkitEnterFullscreen();
+        else if (storyVideo.webkitRequestFullscreen) storyVideo.webkitRequestFullscreen();
+        else if (videoWrap.requestFullscreen) videoWrap.requestFullscreen();
+      }
+      if (videoFullscreen) videoFullscreen.addEventListener('click', enterFullscreen);
       videoToggle.addEventListener('click', togglePlay);
       storyVideo.addEventListener('click', togglePlay);
       storyVideo.addEventListener('error', showVideoError);
