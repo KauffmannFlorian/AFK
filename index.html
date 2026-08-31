@@ -330,6 +330,19 @@
   .video-toggle:hover{background:rgba(33,14,23,.75);}
   .video-toggle .icon-play{margin-left:3px;}
   .video-toggle svg[hidden]{display:none;}
+  .video-wrap video{min-height:220px;}
+  .video-error{
+    position:absolute;
+    inset:0;
+    margin:auto;
+    max-width:80%;
+    height:fit-content;
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    color:var(--hero-ink);
+  }
   .video-wrap.is-playing .video-toggle{opacity:0;}
   .video-wrap.is-playing:hover .video-toggle,
   .video-wrap.is-playing:focus-within .video-toggle{opacity:1;}
@@ -987,11 +1000,27 @@
         if (iconPause) iconPause.hidden = !playing;
         videoToggle.setAttribute('aria-label', playing ? 'Pause' : 'Lecture');
       }
+      function showVideoError(){
+        videoWrap.classList.add('has-error');
+        videoToggle.style.display = 'none';
+        if (!videoWrap.querySelector('.video-error')){
+          var msg = document.createElement('p');
+          msg.className = 'video-error';
+          msg.textContent = 'La vidéo ne peut pas se lire dans ce navigateur.';
+          videoWrap.appendChild(msg);
+        }
+      }
       function togglePlay(){
-        if (storyVideo.paused){ storyVideo.play(); } else { storyVideo.pause(); }
+        if (storyVideo.paused){
+          var p = storyVideo.play();
+          if (p && p.catch) p.catch(function(){ showVideoError(); });
+        } else {
+          storyVideo.pause();
+        }
       }
       videoToggle.addEventListener('click', togglePlay);
       storyVideo.addEventListener('click', togglePlay);
+      storyVideo.addEventListener('error', showVideoError);
       storyVideo.addEventListener('play', function(){ setPlayingState(true); });
       storyVideo.addEventListener('pause', function(){ setPlayingState(false); });
       storyVideo.addEventListener('ended', function(){ setPlayingState(false); });
